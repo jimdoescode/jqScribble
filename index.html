@@ -4,11 +4,12 @@
   <meta charset='utf-8'>
 
   <title>jimdoescode/jqScribble @ GitHub</title>
-
+  <script src="http://code.jquery.com/jquery-1.5.2.min.js" type="text/javascript" ></script>
+  <script src="jquery.jqscribble.js" type="text/javascript"></script>
   <style type="text/css">
     body {
       margin-top: 1.0em;
-      background-color: #7cc97a;
+      background-color: #ddd;
       font-family: Helvetica, Arial, FreeSans, san-serif;
       color: #000000;
     }
@@ -24,7 +25,9 @@
     a { color: #833685; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
+    .example { border: 1px solid #000; height: 350px; background-color: #fff;}
+    p {line-height: 1.5em;}
+    pre { background: #000; color: #fff; padding: 15px; overflow: auto;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
@@ -51,35 +54,73 @@
 
     <p>A jquery plugin that will create a canvas element that you can then scribble on by dragging your mouse, or your finger, across. It also supports displaying an image that can be drawn on and provides a way to hook into saving your image so that it might be passed to a server.
 
+
+
 You can also easily create new brush types for it that can be passed to it.</p><h2>Dependencies</h2>
 <p>jQuery javascript library</p>
-<h2>Install</h2>
-<p>$("#test").jqScribble({backgroundImage: "img.jpg"});</p>
+<h2>Execute</h2>
+<pre>$("#test").jqScribble({
+	width: 			350px,	//If not defined is taken from the attached element
+	height: 		250px,	//If not defined is taken from the attached element
+	backgroundImage: 	false, 	//Define a path to an image to draw on.
+	backgroundImageX: 	0, 		//Offsets background image in x direction
+	backgroundImageY: 	0,		//Offsets background image in y direction
+	saveMimeType: 		"image/png", 		//Save image as mimeType
+	saveFunction: 		BasicCanvasSave,	//Lets you define your own save function for saving to a server or something
+	brush:			BasicBrush,		//Lets you define a custom brush
+	brushSize:		2,			//Increase or decrease the size of the brush
+	brushColor:		"rgb(0,0,0)"		//Change the color of the brush.
+});</pre>
+<h2>Basic Example</h2>
+<div id="example1" class="example"></div>
+<span><button onclick="$('#example1').jqScribble.clear();" title="Clear Scribble">Clear</button> <button onclick="$('#example1').jqScribble.save();" title="Save Scribble">Save</button></span>
 <h2>License</h2>
 <p>Copyright (C) 2011 by Jim Saunders
 
+
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
+
 of this software and associated documentation files (the "Software"), to deal
+
 in the Software without restriction, including without limitation the rights
+
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+
 copies of the Software, and to permit persons to whom the Software is
+
 furnished to do so, subject to the following conditions:
 
+
+
 The above copyright notice and this permission notice shall be included in
+
 all copies or substantial portions of the Software.
 
+
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+
 THE SOFTWARE.
+
 </p>
 <h2>Authors</h2>
-<p>Jim (jimdoescode@gmail.com)<br/><br/>      </p>
+<p>Jim (jimdoescode@gmail.com)
+<br/>
+<br/>      </p>
 <h2>Contact</h2>
-<p>Jim (jimdoescode@gmail.com)<br/>      </p>
+<p>Jim (jimdoescode@gmail.com)
+<br/>      </p>
 
 
     <h2>Download</h2>
@@ -98,7 +139,11 @@ THE SOFTWARE.
     </div>
 
   </div>
-
-  
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		$('#example1').jqScribble();
+	});
+</script>
 </body>
 </html>
