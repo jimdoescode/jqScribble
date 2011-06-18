@@ -159,7 +159,6 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 			$(canvas).bind("mousedown", function(e)
 			{
 				var o = self.offset();
-				console.log(o);
 				brush.strokeBegin(e.pageX-o.left, e.pageY-o.top);
 			});
 			$(canvas).bind("mousemove", function(e)
