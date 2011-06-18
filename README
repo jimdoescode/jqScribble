@@ -19,9 +19,11 @@ DEFAULT - 0
 backgroundImageY: The Y offset in the canvas to put the specified background image
 DEFAULT - 0
 
-saveMimeType: If the image is saved the mime type that will be used. DEFAULT - image/png
+saveMimeType: If the image is saved the mime type that will be used.
+DEFAULT - image/png
 
-saveFunction: The function to use when saving the drawing.		DEFAULT - BasicCanvasSave
+saveFunction: The function to use when saving the drawing.
+DEFAULT - BasicCanvasSave
 
 brush: The brush to used when drawing on the Canvas.
 DEFAULT - BasicBrush
