@@ -92,10 +92,8 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 	};
 	
 	var brush = null;
-	var canvas = document.createElement("canvas");
-	var context = canvas.getContext("2d");
 	
-	function addImage()
+	function addImage(context)
 	{
 		var img = new Image();
 		img.src = settings.backgroundImage;
@@ -104,6 +102,14 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 	
 	$.fn.jqScribble = function(options) 
 	{
+		//Check if the container is a canvas already. If it is
+		//then we need the canvas DOM element otherwise we make
+		//a new canvas element to use.
+		if(this.is('canvas'))this.jqScribble.canvas = this[0];
+		else this.jqScribble.canvas = document.createElement("canvas");
+		
+		var context = this.jqScribble.canvas.getContext("2d");
+	
 		$.extend(settings, options);
 		
 		//The canvas will take the inner dimensions 
@@ -122,12 +128,13 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 			this.css("height", settings.height);
 			height = settings.height;
 		}
-		canvas.width = width;
-		canvas.height = height;
+		this.jqScribble.canvas.width = width;
+		this.jqScribble.canvas.height = height;
 		
-		this.append(canvas);
+		//If the container isn't already a canvas then append the canvas we created
+		if(!this.is('canvas'))this.append(this.jqScribble.canvas);
 		
-		if(settings.backgroundImage)addImage();
+		if(settings.backgroundImage)addImage(context);
 		
 		brush = new settings.brush();
 		brush.init(context, settings.brushSize, settings.brushColor);
@@ -138,39 +145,39 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		{
 			//Have to add touch events the old fashioned way since 
 			//jquery removes that stuff from the event object.
-			canvas.addEventListener("touchstart", function(e)
+			this.jqScribble.canvas.addEventListener("touchstart", function(e)
 			{
 				var o = self.offset();
 				e.preventDefault();
 				if(e.touches.length == 1)brush.strokeBegin(e.touches[0].pageX-o.left, e.touches[0].pageY-o.top);
 			}, false);
-			canvas.addEventListener("touchmove",  function(e)
+			this.jqScribble.canvas.addEventListener("touchmove",  function(e)
 			{
 				var o = self.offset();
 				e.preventDefault();
 				if(e.touches.length == 1)brush.strokeMove(e.touches[0].pageX-o.left, e.touches[0].pageY-o.top);
 			}, false);
-			canvas.addEventListener("touchend",   function(e)
+			this.jqScribble.canvas.addEventListener("touchend",   function(e)
 			{
 				e.preventDefault();
 				if(e.touches.length == 0)brush.strokeEnd();
 			}, false);
 		
-			$(canvas).bind("mousedown", function(e)
+			$(this.jqScribble.canvas).bind("mousedown", function(e)
 			{
 				var o = self.offset();
 				brush.strokeBegin(e.pageX-o.left, e.pageY-o.top);
 			});
-			$(canvas).bind("mousemove", function(e)
+			$(this.jqScribble.canvas).bind("mousemove", function(e)
 			{
 				var o = self.offset();
 				brush.strokeMove(e.pageX-o.left, e.pageY-o.top);
 			});
-			$(canvas).bind("mouseup",   function(e)
+			$(this.jqScribble.canvas).bind("mouseup",   function(e)
 			{
 				brush.strokeEnd();
 			});
-			$(canvas).bind("mouseout",   function(e)
+			$(this.jqScribble.canvas).bind("mouseout",   function(e)
 			{
 				brush.strokeEnd();
 			});
@@ -182,10 +189,15 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		var newImg = !!options.backgroundImage;
 		$.extend(settings, options);
 		
-		if(newImg)addImage();
+		var context = this.canvas.getContext("2d");	
+		if(newImg)addImage(context);
 		brush.init(context, settings.brushSize, settings.brushColor);
 	}
 	
-	$.fn.jqScribble.clear = function(){context.clearRect(0, 0, canvas.width, canvas.height);}
-	$.fn.jqScribble.save = function(){settings.saveFunction(canvas.toDataURL(settings.saveMimeType));}
+	$.fn.jqScribble.clear = function()
+	{
+		var context = this.canvas.getContext("2d");
+		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	}
+	$.fn.jqScribble.save = function(){settings.saveFunction(this.canvas.toDataURL(settings.saveMimeType));}
 })(jQuery);
