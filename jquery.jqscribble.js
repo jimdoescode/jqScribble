@@ -29,6 +29,7 @@ function jqScribbleBrush()
 		this.brushColor = brushColor;
 		this.prevX = null; 
 		this.prevY = null;
+		this.moved = false;
 	}
 	jqScribbleBrush.prototype.update = function(options)
 	{
@@ -36,8 +37,19 @@ function jqScribbleBrush()
 		if(options.brushColor)this.brushColor = options.brushColor;
 	}
 	jqScribbleBrush.prototype.strokeBegin = function(x, y){};
-	jqScribbleBrush.prototype.strokeMove = function(x, y){};
-	jqScribbleBrush.prototype.strokeEnd = function(){};
+	jqScribbleBrush.prototype.strokeMove = function(x, y)
+	{
+		if(this.moved === false && this.prevX != null && this.prevY != null)this.moved = true;
+	};
+	jqScribbleBrush.prototype.strokeEnd = function()
+	{
+		if(this.moved)
+		{
+			this.moved = false;
+			return true;
+		}
+		return false;
+	};
 }
 //All brushes should inherit from the Brush interface
 BasicBrush.prototype = new jqScribbleBrush;
@@ -45,6 +57,7 @@ function BasicBrush()
 {
 	BasicBrush.prototype.strokeBegin = function(x, y)
 	{
+		jqScribbleBrush.prototype.strokeBegin.call(this, x, y);
 		this.prevX = x; 
 		this.prevY = y;
 		this.context.beginPath();
@@ -52,6 +65,7 @@ function BasicBrush()
 	
 	BasicBrush.prototype.strokeMove = function(x, y)
 	{
+		jqScribbleBrush.prototype.strokeMove.call(this, x, y);
 		if(this.prevX != null && this.prevY != null)
 		{
 			this.context.lineWidth = this.brushSize;
@@ -71,6 +85,7 @@ function BasicBrush()
 	{
 		this.prevX = null;
 		this.prevY = null;
+		return jqScribbleBrush.prototype.strokeEnd.call(this);
 	}
 }
 
@@ -105,6 +120,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		//Check if the container is a canvas already. If it is
 		//then we need the canvas DOM element otherwise we make
 		//a new canvas element to use.
+		this.jqScribble.blank = true;
 		if(this.is('canvas'))this.jqScribble.canvas = this[0];
 		else this.jqScribble.canvas = document.createElement("canvas");
 		
@@ -134,7 +150,11 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		//If the container isn't already a canvas then append the canvas we created
 		if(!this.is('canvas'))this.append(this.jqScribble.canvas);
 		
-		if(settings.backgroundImage)addImage(context);
+		if(settings.backgroundImage)
+		{
+			addImage(context);
+			this.jqScribble.blank = false;
+		}
 		
 		brush = new settings.brush();
 		brush.init(context, settings.brushSize, settings.brushColor);
@@ -160,7 +180,11 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 			this.jqScribble.canvas.addEventListener("touchend",   function(e)
 			{
 				e.preventDefault();
-				if(e.touches.length == 0)brush.strokeEnd();
+				if(e.touches.length == 0)
+				{
+					var moved = !brush.strokeEnd();
+					if(self.jqScribble.blank !== false)self.jqScribble.blank = moved;
+				}
 			}, false);
 		
 			$(this.jqScribble.canvas).bind("mousedown", function(e)
@@ -175,11 +199,13 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 			});
 			$(this.jqScribble.canvas).bind("mouseup",   function(e)
 			{
-				brush.strokeEnd();
+				var moved = !brush.strokeEnd();
+				if(self.jqScribble.blank !== false)self.jqScribble.blank = moved;
 			});
 			$(this.jqScribble.canvas).bind("mouseout",   function(e)
 			{
-				brush.strokeEnd();
+				var moved = !brush.strokeEnd();
+				if(self.jqScribble.blank !== false)self.jqScribble.blank = moved;
 			});
 		}
 	};
@@ -190,7 +216,11 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		$.extend(settings, options);
 		
 		var context = this.canvas.getContext("2d");	
-		if(newImg)addImage(context);
+		if(newImg)
+		{
+			addImage(context);
+			this.blank = false;
+		}
 		brush.init(context, settings.brushSize, settings.brushColor);
 	}
 	
@@ -198,6 +228,10 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 	{
 		var context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.blank = true;
 	}
-	$.fn.jqScribble.save = function(){settings.saveFunction(this.canvas.toDataURL(settings.saveMimeType));}
+	$.fn.jqScribble.save = function()
+	{
+		if(!this.blank)settings.saveFunction(this.canvas.toDataURL(settings.saveMimeType));
+	}
 })(jQuery);
