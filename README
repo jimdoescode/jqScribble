@@ -45,10 +45,10 @@ strokeMove(x, y)
 strokeEnd()
 
 
-A save function will be passed the image data of the canvas.
+A save function will be passed the image data of the canvas, provided the canvas is not empty.
 function mySave(imageData)
 
-The specified save function will not be called until the canvas is saved with a call to 
+The specified save function will not be called until the canvas is not empty and you call the jqScribble save function. 
 
 $('').jqScribble.save() 
 
