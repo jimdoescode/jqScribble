@@ -66,3 +66,7 @@ $('').jqScribble.clear()
 You can also access the canvas element jqScribble is using by calling
 
 $('').jqScribble.canvas
+
+You can check if the canvas has been drawn on by checking 
+
+$('').jqScribble.blank
