@@ -50,15 +50,19 @@ function mySave(imageData)
 
 The specified save function will not be called until the canvas is saved with a call to 
 
-$(É).jqScribble.save() 
+$('').jqScribble.save() 
 
 
 Updates can be passed to the jqscribble by calling
 
-$(É).jqScribble.update(options)
+$('').jqScribble.update(options)
 
 Where options are any of the original options specified above.
 
 To reset the canvas call 
 
-$(É).jqScribble.clear()
+$('').jqScribble.clear()
+
+You can also access the canvas element jqScribble is using by calling
+
+$('').jqScribble.canvas
