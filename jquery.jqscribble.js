@@ -121,7 +121,8 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		//then we need the canvas DOM element otherwise we make
 		//a new canvas element to use.
 		this.jqScribble.blank = true;
-		if(this.is('canvas'))this.jqScribble.canvas = this[0];
+		var noparent = this.is('canvas');
+		if(noparent)this.jqScribble.canvas = this[0];
 		else this.jqScribble.canvas = document.createElement("canvas");
 		
 		var context = this.jqScribble.canvas.getContext("2d");
@@ -134,21 +135,19 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		//enough to make a valid drawing area.
 		var width = this.innerWidth();
 		var height = this.innerHeight();
-		if(width < 2)
+		if(noparent)
 		{
-			this.css("width", settings.width);
-			width = settings.width;
+			width = this.parent().width();
+			height = this.parent().height();
 		}
-		if(height < 2)
-		{
-			this.css("height", settings.height);
-			height = settings.height;
-		}
+		if(width < 2)width = settings.width;
+		if(height < 2)height = settings.height;
+		
 		this.jqScribble.canvas.width = width;
 		this.jqScribble.canvas.height = height;
 		
 		//If the container isn't already a canvas then append the canvas we created
-		if(!this.is('canvas'))this.append(this.jqScribble.canvas);
+		if(!noparent)this.append(this.jqScribble.canvas);
 		
 		if(settings.backgroundImage)
 		{
@@ -222,6 +221,9 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 			this.blank = false;
 		}
 		brush.init(context, settings.brushSize, settings.brushColor);
+		
+		this.canvas.width = settings.width;
+		this.canvas.height = settings.height;
 	}
 	
 	$.fn.jqScribble.clear = function()
