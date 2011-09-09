@@ -19,6 +19,9 @@ DEFAULT - 0
 backgroundImageY: The Y offset in the canvas to put the specified background image
 DEFAULT - 0
 
+backgroundColor: The hex color value to set the background as.
+DEFAULT - #ffffff
+
 saveMimeType: If the image is saved the mime type that will be used.
 DEFAULT - image/png
 

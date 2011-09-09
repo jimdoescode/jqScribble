@@ -99,6 +99,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		backgroundImage:	false,
 		backgroundImageX: 	0,
 		backgroundImageY: 	0,
+		backgroundColor:	"#ffffff",
 		saveMimeType: 		"image/png",
 		saveFunction: 		BasicCanvasSave,
 		brush:				BasicBrush,
@@ -126,7 +127,6 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		else this.jqScribble.canvas = document.createElement("canvas");
 		
 		var context = this.jqScribble.canvas.getContext("2d");
-	
 		$.extend(settings, options);
 		
 		//The canvas will take the inner dimensions 
@@ -145,6 +145,8 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		
 		this.jqScribble.canvas.width = width;
 		this.jqScribble.canvas.height = height;
+		
+		this.jqScribble.clear();
 		
 		//If the container isn't already a canvas then append the canvas we created
 		if(!noparent)this.append(this.jqScribble.canvas);
@@ -216,22 +218,28 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		var newHeight = !!options.height;
 		$.extend(settings, options);
 		
-		var context = this.canvas.getContext("2d");	
+		var context = this.canvas.getContext("2d");
+		
+		brush.init(context, settings.brushSize, settings.brushColor);
+		
+		if(newWidth)this.canvas.width = settings.width;
+		if(newHeight)this.canvas.height = settings.height;
+		
+		this.clear();
+		
 		if(newImg)
 		{
 			addImage(context);
 			this.blank = false;
 		}
-		brush.init(context, settings.brushSize, settings.brushColor);
-		
-		if(newWidth)this.canvas.width = settings.width;
-		if(newHeight)this.canvas.height = settings.height;
 	}
 	
 	$.fn.jqScribble.clear = function()
 	{
 		var context = this.canvas.getContext("2d");
 		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		context.fillStyle = settings.backgroundColor;
+		context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		this.blank = true;
 	}
 	$.fn.jqScribble.save = function()
