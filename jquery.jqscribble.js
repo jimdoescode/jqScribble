@@ -231,7 +231,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 			addImage(context);
 			this.blank = false;
 		}
-	}
+	};
 	
 	$.fn.jqScribble.clear = function()
 	{
@@ -240,7 +240,8 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		context.fillStyle = settings.backgroundColor;
 		context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		this.blank = true;
-	}
+	};
+	
 	$.fn.jqScribble.save = function()
 	{
 		if(!this.blank)settings.saveFunction(this.canvas.toDataURL(settings.saveMimeType));
