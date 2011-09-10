@@ -211,8 +211,9 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		}
 	};
 	
-	$.fn.jqScribble.update = function(options)
+	$.fn.jqScribble.update = function(options, reset)
 	{
+		var newBg = !!options.backgroundColor;
 		var newImg = !!options.backgroundImage;
 		var newWidth = !!options.width;
 		var newHeight = !!options.height;
@@ -224,9 +225,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		
 		if(newWidth)this.canvas.width = settings.width;
 		if(newHeight)this.canvas.height = settings.height;
-		
-		this.clear();
-		
+		if(newBg || newImg)this.clear();
 		if(newImg)
 		{
 			addImage(context);
