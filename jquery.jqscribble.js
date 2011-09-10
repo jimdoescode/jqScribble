@@ -30,12 +30,12 @@ function jqScribbleBrush()
 		this.prevX = null; 
 		this.prevY = null;
 		this.moved = false;
-	}
+	};
 	jqScribbleBrush.prototype.update = function(options)
 	{
 		if(options.brushSize)this.brushSize = options.brushSize;
 		if(options.brushColor)this.brushColor = options.brushColor;
-	}
+	};
 	jqScribbleBrush.prototype.strokeBegin = function(x, y){};
 	jqScribbleBrush.prototype.strokeMove = function(x, y)
 	{
@@ -61,7 +61,7 @@ function BasicBrush()
 		this.prevX = x; 
 		this.prevY = y;
 		this.context.beginPath();
-	}
+	};
 	
 	BasicBrush.prototype.strokeMove = function(x, y)
 	{
@@ -79,14 +79,14 @@ function BasicBrush()
 			this.prevX = x;
 			this.prevY = y;
 		}
-	}
+	};
 	
 	BasicBrush.prototype.strokeEnd = function()
 	{
 		this.prevX = null;
 		this.prevY = null;
 		return jqScribbleBrush.prototype.strokeEnd.call(this);
-	}
+	};
 }
 
 function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
@@ -245,5 +245,5 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 	$.fn.jqScribble.save = function()
 	{
 		if(!this.blank)settings.saveFunction(this.canvas.toDataURL(settings.saveMimeType));
-	}
+	};
 })(jQuery);
