@@ -225,7 +225,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'My Image');}
 		
 		if(newWidth)this.canvas.width = settings.width;
 		if(newHeight)this.canvas.height = settings.height;
-		if(newBg || newImg)this.clear();
+		if(newBg || newImg || newWidth || newHeight)this.clear();
 		if(newImg)
 		{
 			addImage(context);
