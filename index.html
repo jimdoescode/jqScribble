@@ -1,140 +1,75 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset='utf-8'>
-
-  <title>jimdoescode/jqScribble @ GitHub</title>
-  <script src="http://code.jquery.com/jquery-1.5.2.min.js" type="text/javascript" ></script>
-  <script src="jquery.jqscribble.js" type="text/javascript"></script>
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #ddd;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    #buttons {margin-top: 10px;}
-    	#buttons button {
-    		font-size: 1.2em;
-    		padding: 10px;
-    		border-radius: 5px;
-    		background-color: #ededed;
-    	}
-    h1 { font-size: 3.8em; color: #222; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #222; }
-    h3 { text-align: center; color: #222; }
-    a { color: #833685; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    .example { border: 1px solid #000; height: 350px; background-color: #fff;}
-    p {line-height: 1.5em;}
-    pre { background: #000; color: #fff; padding: 15px; overflow: auto;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
-</head>
-
-<body>
-	<a href="http://github.com/jimdoescode/jqScribble"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-	<div id="container">
-		<div class="download">
-			<a href="http://github.com/jimdoescode/jqScribble/zipball/master">
-				<img border="0" width="90" src="http://github.com/images/modules/download/zip.png">
-    		</a><a href="http://github.com/jimdoescode/jqScribble/tarball/master">
-        		<img border="0" width="90" src="http://github.com/images/modules/download/tar.png">
-        	</a>
-    	</div>
-		<h1>
-			<a href="http://github.com/jimdoescode/jqScribble">jqScribble</a>
-      		<span class="small">by <a href="http://github.com/jimdoescode">jimdoescode</a></span>
-      	</h1>
-		<div class="description">
-		  A touch enabled jquery plugin for drawing on a canvas
+<html lang="en">
+	<head>
+		<title>jqScribble example</title>
+		
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width;initial-scale=1.0;maximum-scale=1.0;user-scalable=0;"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+			
+		<script src="http://code.jquery.com/jquery-1.5.2.min.js" type="text/javascript" ></script>
+		<script src="jquery.jqscribble.js" type="text/javascript"></script>
+		<script src="jqscribble.extrabrushes.js" type="text/javascript"></script>
+		
+		<style>
+			.links a {
+				padding-left: 10px;
+				margin-left: 10px;
+				border-left: 1px solid #000;
+				text-decoration: none;
+				color: #999;
+			}
+			.links a:first-child {
+				padding-left: 0;
+				margin-left: 0;
+				border-left: none;
+			}
+			.links a:hover {text-decoration: underline;}
+			.column-left {
+				display: inline; 
+				float: left;
+			}
+			.column-right {
+				display: inline; 
+				float: right;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 style="text-align: center;"><a href="https://github.com/jimdoescode/jqScribble">jqScribble GitHub Repo</a></h1>
+		<div style="overflow: hidden; margin: 15px 0 5px 0;">
+			<div class="column-left links">
+				<strong>BRUSHES:</strong>
+				<a href="#" onclick='$("#test").jqScribble.update({brush: BasicBrush});'>Basic</a>
+				<a href="#" onclick='$("#test").jqScribble.update({brush: LineBrush});'>Line</a>
+				<a href="#" onclick='$("#test").jqScribble.update({brush: CrossBrush});'>Cross</a>
+			</div>
+			<div class="column-right links">
+				<strong>COLORS:</strong>
+				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(0,0,0)"});'>Black</a>
+				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(255,0,0)"});'>Red</a>
+				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(0,255,0)"});'>Green</a>
+				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(0,0,255)"});'>Blue</a>
+			</div>
 		</div>
-		<p>
-			A jquery plugin that will create a canvas element that you can 
-			then scribble on by dragging your mouse, or your finger, across. 
-			It also supports displaying an image that can be drawn on and 
-			provides a way to hook into saving your image so that it might 
-			be passed to a server.You can also easily create new brush types 
-			for it that can be passed to it.
-		</p>
-		<h2>Dependencies</h2>
-		<p>jQuery javascript library</p>
-		<h2>Execute</h2>
-		<pre>
-$("#test").jqScribble({
-	width: 			350px,	//If not defined is taken from the attached element
-	height: 		250px,	//If not defined is taken from the attached element
-	backgroundImage: 	false, 	//Define a path to an image to draw on.
-	backgroundImageX: 	0, 		//Offsets background image in x direction
-	backgroundImageY: 	0,		//Offsets background image in y direction
-	saveMimeType: 		"image/png", 		//Save image as mimeType
-	saveFunction: 		BasicCanvasSave,	//Lets you define your own save function for saving to a server or something
-	brush:			BasicBrush,		//Lets you define a custom brush
-	brushSize:		2,			//Increase or decrease the size of the brush
-	brushColor:		"rgb(0,0,0)"		//Change the color of the brush.
-});
-		</pre>
-		<h2>Basic Example</h2>
-		<div id="example1" class="example"></div>
-		<div id="buttons">
-			<button onclick="$('#example1').jqScribble.clear();" title="Clear Scribble">Clear</button>
-			<button onclick="$('#example1').jqScribble.save();" title="Save Scribble">Save</button>
+		<canvas id="test" style="border: 1px solid red;"></canvas>
+		<div class="links" style="margin-top: 5px;">
+			<strong>OPTIONS:</strong>
+			<a href="#" onclick='addImage();'>Add Image</a>
+			<a href="#" onclick='$("#test").jqScribble.clear();'>Clear</a>
+			<a href="#" onclick='$("#test").jqScribble.save();'>Save</a>
 		</div>
-		<h2>License</h2>
-		<p>
-			Copyright (C) 2011 by Jim Saunders<br/><br/>
-			Permission is hereby granted, free of charge, to any person 
-			obtaining a copy of this software and associated documentation 
-			files (the "Software"), to deal in the Software without 
-			restriction, including without limitation the rights to use, 
-			copy, modify, merge, publish, distribute, sublicense, and/or sell
-			copies of the Software, and to permit persons to whom the 
-			Software is furnished to do so, subject to the following 
-			conditions:<br/><br/>
-			The above copyright notice and this permission notice shall be 
-			included in all copies or substantial portions of the Software.
-			<br/><br/>
-			THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-			EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-			OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-			NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-			HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-			WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-			FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-			OTHER DEALINGS IN THE SOFTWARE.
-		</p>
-		<h2>Authors</h2>
-		<p>Jim (github.com/jimdoescode/)<br/><br/></p>
-		<h2>Contact</h2>
-		<p>Jim (github.com/jimdoescode/)<br/></p>
-
-    	<h2>Download</h2>
-    	<p>
-      		You can download this project in either
-      		<a href="http://github.com/jimdoescode/jqScribble/zipball/master">zip</a> or
-      		<a href="http://github.com/jimdoescode/jqScribble/tarball/master">tar</a> formats.
-    	</p>
-    	<p>
-    		You can also clone the project with <a href="http://git-scm.com">Git</a> by running:
-      		<pre>$ git clone git://github.com/jimdoescode/jqScribble</pre>
-    	</p>
-		<div class="footer">
-			get the source code on GitHub : <a href="http://github.com/jimdoescode/jqScribble">jimdoescode/jqScribble</a>
-		</div>
-	</div>
-	<script type="text/javascript">
+		<script type="text/javascript">
+		function addImage()
+		{
+			var img = prompt("Enter the URL of the image.");
+			if(img !== '')$("#test").jqScribble.update({backgroundImage: img});
+		}
 		$(document).ready(function()
 		{
-			$('#example1').jqScribble();
+			$("#test").jqScribble();
 		});
-	</script>
-</body>
+		</script>
+	</body>
 </html>
