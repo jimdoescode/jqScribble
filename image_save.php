@@ -8,5 +8,3 @@ $data = base64_decode($data);
 $imgRes = imagecreatefromstring($data);
 if($imgRes !== false && imagepng($imgRes, $filename) === true)
     echo "<img src='{$filename}' alt='jqScribble Created Image'/>";
-    
-?>

@@ -6,9 +6,9 @@ jqScribble is a jquery plugin that will allow you to draw on an HTML5 canvas ele
 Usage
 -----
 To use the jqScribble plugin first select a jquery element to attach to scribble canvas to. Then specify any options you wish.
-
+```js
 $('#test').jqScribble(options);
-
+```
 Available Options
 -----------------
 width: The width of the Canvas element if not specified then the width of the parent is used
@@ -47,51 +47,54 @@ DEFAULT - rgb(0,0,0)
 Creating Brushes
 ----------------
 New brushes should inherit from the jqScribbleBrush object as follows:
-
+```js
 NewBrush.prototype = new jqScribbleBrush.
 NewBrush(){...}
-
+```
 They should also implement the following methods:
+```js
 strokeBegin(x, y)
 strokeMove(x, y)
-
+```
 and can optionally implement
-
+```js
 strokeEnd()
-
+```
 Image Saving
 ------------
 A save function will be passed the image data of the canvas, provided the canvas is not empty.
+```js
 function mySave(imageData)
-
+```
 The specified save function will not be called until the canvas is not empty and you call the jqScribble save function. 
-
+```js
 $('').jqScribble.save() 
-
+```
 You can also specify a save function at the time of saving by calling save with a function parameter.
-
+```js
 $('').jqScribble.save(function(imageData){...});
-
+```
 Updating jqScribble Options
 ---------------------------
 Updates can be passed to the jqscribble by calling
-
+```js
 $('').jqScribble.update(options)
-
+```
 Where options are any of the original options specified above.
 
 Clearing The Canvas
 -------------------
 To reset the canvas call 
-
+```js
 $('').jqScribble.clear()
-
+```
 jqScribble Attributes
 ---------------------
 You can also access the canvas element jqScribble is using by calling
-
+```js
 $('').jqScribble.canvas
-
+```
 You can check if the canvas has been drawn on by checking 
-
+```js
 $('').jqScribble.blank
+```
