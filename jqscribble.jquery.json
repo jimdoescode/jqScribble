@@ -1,6 +1,6 @@
 {
     "name": "jqscribble",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "A touch enabled canvas drawing tool",
     "author": {
         "name": "Jim Saunders",
