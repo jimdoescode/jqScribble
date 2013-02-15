@@ -1,6 +1,6 @@
 {
     "name": "jqscribble",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "title": "jqScribble - A touch enabled canvas drawing tool",
     "author": {
         "name": "Jim Saunders",
@@ -12,7 +12,7 @@
     "dependencies": {
         "jquery": "1.5 - 1.9"
     },
-    "description": "A small canvas drawing plugin. It lets you draw on a canvas, add an image to a canvas, and save your drawing as an image. A simple PHP file is included in the repo to demonstrate how you might save the image server side. It is touch enabled so you can draw using finger on a touch enabled devices as well as the mouse on standard devices.",
+    "description": "A small canvas drawing plugin. It lets you draw on a canvas, add an image to a canvas, and save your drawing as an image. A simple PHP file is included in the repo to demonstrate how you might save the image server side. It is touch enabled so you can draw using a finger on touch enabled devices as well as the mouse on standard devices.",
     "keywords": ["touch", "draw", "canvas", "scribble", "drawing", "paint", "brush", "mobile"],
     "demo": "http://jimdoescode.github.com/jqScribble",
     "homepage": "https://github.com/jimdoescode/jqScribble"

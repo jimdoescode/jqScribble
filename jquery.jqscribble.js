@@ -104,139 +104,150 @@ function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
 		brushColor:			"rgb(0,0,0)"
 	};
 	
-	var brush = null;
-	
 	function addImage(context)
 	{
 		var img = new Image();
 		img.src = settings.backgroundImage;
 		img.onload = function(){context.drawImage(img, settings.backgroundImageX, settings.backgroundImageY);}
 	}
-	
-	$.fn.jqScribble = function(options) 
-	{
-		//Check if the container is a canvas already. If it is
-		//then we need the canvas DOM element otherwise we make
-		//a new canvas element to use.
-		this.jqScribble.blank = true;
-		var noparent = this.is('canvas');
-		if(noparent)this.jqScribble.canvas = this[0];
-		else this.jqScribble.canvas = document.createElement("canvas");
-		
-		var context = this.jqScribble.canvas.getContext("2d");
-		$.extend(settings, options);
-		
-		//The canvas will take the inner dimensions 
-		//of the element it will be attached to, or
-		//the settings value if the dims aren't large
-		//enough to make a valid drawing area.
-		var width = this.innerWidth();
-		var height = this.innerHeight();
-		if(noparent)
-		{
-			width = this.parent().width();
-			height = this.parent().height();
-		}
-		if(width < 2)width = settings.width;
-		if(height < 2)height = settings.height;
-		
-		this.jqScribble.canvas.width = width;
-		this.jqScribble.canvas.height = height;
-		
-		this.jqScribble.clear();
-		
-		//If the container isn't already a canvas then append the canvas we created
-		if(!noparent)this.append(this.jqScribble.canvas);
-		
-		if(settings.backgroundImage)
-		{
-			addImage(context);
-			this.jqScribble.blank = false;
-		}
-		
-		brush = new settings.brush();
-		brush._init(context, settings.brushSize, settings.brushColor);
-		
-		var self = this;
-		
-		if(brush.strokeBegin && brush.strokeMove && brush.strokeEnd)
-		{
-			//Have to add touch events the old fashioned way since 
-			//jquery removes that stuff from the event object.
-			this.jqScribble.canvas.addEventListener("touchstart", function(e)
-			{
-				var o = self.offset();
-				e.preventDefault();
-				if(e.touches.length > 0)brush.strokeBegin(e.touches[0].pageX-o.left, e.touches[0].pageY-o.top);
-			}, false);
-			this.jqScribble.canvas.addEventListener("touchmove",  function(e)
-			{
-				var o = self.offset();
-				e.preventDefault();
-				if(e.touches.length > 0 && brush.active)brush.strokeMove(e.touches[0].pageX-o.left, e.touches[0].pageY-o.top);
-			}, false);
-			this.jqScribble.canvas.addEventListener("touchend",   function(e)
-			{
-				e.preventDefault();
-				if(e.touches.length == 0)self.jqScribble.blank = !brush.strokeEnd() && self.jqScribble.blank;
-			}, false);
-		
-			$(this.jqScribble.canvas).bind("mousedown", function(e)
-			{
-				var o = self.offset();
-				brush.strokeBegin(e.pageX-o.left, e.pageY-o.top);
-			});
-			$(this.jqScribble.canvas).bind("mousemove", function(e)
-			{
-				var o = self.offset();
-				if(brush.active)brush.strokeMove(e.pageX-o.left, e.pageY-o.top);
-			});
-			$(this.jqScribble.canvas).bind("mouseup mouseout",  function(e){self.jqScribble.blank = !brush.strokeEnd() && self.jqScribble.blank;});
-		}
-	};
-	
-	$.fn.jqScribble.update = function(options, reset)
-	{
-		var newBg = !!options.backgroundColor;
-		var newImg = !!options.backgroundImage;
-		var newWidth = !!options.width;
-		var newHeight = !!options.height;
-		var newBrush = !!options.brush;
-		$.extend(settings, options);
-		
-		var context = this.canvas.getContext("2d");
-		
-		if(newBrush)brush = new settings.brush();
-		brush._init(context, settings.brushSize, settings.brushColor);
-		
-		if(newWidth)this.canvas.width = settings.width;
-		if(newHeight)this.canvas.height = settings.height;
-		if(newBg || newImg || newWidth || newHeight || reset)this.clear();
-		if(newImg)
-		{
-			addImage(context);
-			this.blank = false;
-		}
-		return this;
-	};
-	
-	$.fn.jqScribble.clear = function()
-	{
-		var context = this.canvas.getContext("2d");
-		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		context.fillStyle = settings.backgroundColor;
-		context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-		this.blank = true;
-		return this;
-	};
-	
-	$.fn.jqScribble.save = function(newSave)
-	{
-		var saveFunction = settings.saveFunction;
-		if(typeof newSave === 'function')saveFunction = newSave;
-		
-		if(!this.blank)saveFunction(this.canvas.toDataURL(settings.saveMimeType));
-		return this;
-	};
-	
+
+    var jqScribble = function(elm, options)
+    {
+        var $elm = $(elm);
+        var self = this;
+        var noparent = $elm.is('canvas');
+        var canvas = noparent ? $elm[0] : document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        var width = $elm.innerWidth();
+        var height = $elm.innerHeight();
+
+        $.extend(settings, options);
+
+        if(noparent)
+        {
+            width = $elm.parent().width();
+            height = $elm.parent().height();
+        }
+        else $elm.append(canvas);
+
+        if(width < 2)width = settings.width;
+        if(height < 2)height = settings.height;
+
+        self.blank = true;
+        self.canvas = canvas;
+        self.canvas.width = width;
+        self.canvas.height = height;
+        self.clear();
+
+        if(settings.backgroundImage)
+        {
+            addImage(context);
+            self.blank = false;
+        }
+
+        self.brush = new settings.brush();
+        self.brush._init(context, settings.brushSize, settings.brushColor);
+
+        if(self.brush.strokeBegin && self.brush.strokeMove && self.brush.strokeEnd)
+        {
+            //Have to add touch events the old fashioned way since
+            //jquery removes that stuff from the event object.
+            canvas.addEventListener('touchstart', function(e)
+            {
+                var o = $elm.offset();
+                e.preventDefault();
+                if(e.touches.length > 0)self.brush.strokeBegin(e.touches[0].pageX-o.left, e.touches[0].pageY-o.top);
+
+            }, false);
+
+            canvas.addEventListener('touchmove', function(e)
+            {
+                var o = $elm.offset();
+                e.preventDefault();
+                if(e.touches.length > 0 && self.brush.active)self.brush.strokeMove(e.touches[0].pageX-o.left, e.touches[0].pageY-o.top);
+
+            }, false);
+
+            canvas.addEventListener('touchend', function(e)
+            {
+                e.preventDefault();
+                if(e.touches.length == 0)self.blank = !self.brush.strokeEnd() && self.blank;
+
+            }, false);
+
+            $(canvas).bind({
+                mousedown: function(e)
+                {
+                    var o = $elm.offset();
+                    self.brush.strokeBegin(e.pageX-o.left, e.pageY-o.top);
+                },
+                mousemove: function(e)
+                {
+                    var o = $elm.offset();
+                    if(self.brush.active)self.brush.strokeMove(e.pageX-o.left, e.pageY-o.top);
+                },
+                mouseup: function(e){self.blank = !self.brush.strokeEnd() && self.blank;},
+                mouseout: function(e){self.blank = !self.brush.strokeEnd() && self.blank;}
+            });
+        }
+    };
+
+    jqScribble.prototype = {
+
+        clear: function()
+        {
+            var context = this.canvas.getContext('2d');
+            var width = this.canvas.width;
+            var height = this.canvas.height;
+            context.clearRect(0, 0, width, height);
+            context.fillStyle = settings.backgroundColor;
+            context.fillRect(0, 0, width, height);
+            this.blank = true;
+            return this;
+        },
+
+        save: function(newSave)
+        {
+            var saveFunction = settings.saveFunction;
+            if(typeof newSave === 'function')saveFunction = newSave;
+
+            if(!this.blank)saveFunction(this.canvas.toDataURL(settings.saveMimeType));
+            return this;
+        },
+
+        update: function(options, reset)
+        {
+            var newBg = !!options.backgroundColor;
+            var newImg = !!options.backgroundImage;
+            var newWidth = !!options.width;
+            var newHeight = !!options.height;
+            var newBrush = !!options.brush;
+
+            $.extend(settings, options);
+
+            var context = this.canvas.getContext("2d");
+
+            if(newBrush)this.brush = new settings.brush();
+            this.brush._init(context, settings.brushSize, settings.brushColor);
+
+            if(newWidth)this.canvas.width = settings.width;
+            if(newHeight)this.canvas.height = settings.height;
+            if(newBg || newImg || newWidth || newHeight || reset)this.clear();
+            if(newImg)
+            {
+                addImage(context);
+                this.blank = false;
+            }
+            return this;
+        }
+    };
+
+    $.fn.jqScribble = function(options)
+    {
+        return this.each(function()
+        {
+            if(!$.data(this, 'jqScribble'))$.data(this, 'jqScribble', new jqScribble(this, options));
+        });
+    };
+
 })(jQuery);

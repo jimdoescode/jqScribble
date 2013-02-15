@@ -40,30 +40,30 @@
 		<div style="overflow: hidden; margin-bottom: 5px;">
 			<div class="column-left links">
 				<strong>BRUSHES:</strong>
-				<a href="#" onclick='$("#test").jqScribble.update({brush: BasicBrush});'>Basic</a>
-				<a href="#" onclick='$("#test").jqScribble.update({brush: LineBrush});'>Line</a>
-				<a href="#" onclick='$("#test").jqScribble.update({brush: CrossBrush});'>Cross</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: BasicBrush});'>Basic</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: LineBrush});'>Line</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: CrossBrush});'>Cross</a>
 			</div>
 			<div class="column-right links">
 				<strong>COLORS:</strong>
-				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(0,0,0)"});'>Black</a>
-				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(255,0,0)"});'>Red</a>
-				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(0,255,0)"});'>Green</a>
-				<a href="#" onclick='$("#test").jqScribble.update({brushColor: "rgb(0,0,255)"});'>Blue</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brushColor: "rgb(0,0,0)"});'>Black</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brushColor: "rgb(255,0,0)"});'>Red</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brushColor: "rgb(0,255,0)"});'>Green</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brushColor: "rgb(0,0,255)"});'>Blue</a>
 			</div>
 		</div>
 		<canvas id="test" style="border: 1px solid red;"></canvas>
 		<div class="links" style="margin-top: 5px;">
 			<strong>OPTIONS:</strong>
 			<a href="#" onclick='addImage();'>Add Image</a>
-			<a href="#" onclick='$("#test").jqScribble.clear();'>Clear</a>
-			<a href="#" onclick='$("#test").jqScribble.save();'>Save</a>
+			<a href="#" onclick='$("#test").data("jqScribble").clear();'>Clear</a>
+			<a href="#" onclick='$("#test").data("jqScribble").save();'>Save</a>
 			<a href="#" onclick='save();'>Custom Save</a>
 		</div>
 		<script type="text/javascript">
 		function save()
 		{
-			$("#test").jqScribble.save(function(imageData)
+			$("#test").data("jqScribble").save(function(imageData)
 			{
 				if(confirm("This will write a file using the example image_save.php. Is that cool with you?"))
 				{
@@ -77,7 +77,7 @@
 		function addImage()
 		{
 			var img = prompt("Enter the URL of the image.");
-			if(img !== '')$("#test").jqScribble.update({backgroundImage: img});
+			if(img !== '')$("#test").data("jqScribble").update({backgroundImage: img});
 		}
 		$(document).ready(function()
 		{
