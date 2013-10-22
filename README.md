@@ -42,7 +42,10 @@ brushSize: The size of the brush that is used.
 DEFAULT - 2
 
 brushColor: The color of the brush stroke.
-DEFAULT - rgb(0,0,0)
+DEFAULT - rgb
+
+fillOnClear: Controls whether or not the canvas will be filled with color upon execution of clear().
+DEFAULT - true
 
 Creating Brushes
 ----------------

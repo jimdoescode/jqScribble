@@ -101,7 +101,8 @@ function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
 		saveFunction: 		BasicCanvasSave,
 		brush:				BasicBrush,
 		brushSize:			2,
-		brushColor:			"rgb(0,0,0)"
+		brushColor:			"rgb(0,0,0)",
+    fillOnClear: true
 	};
 	
 	function addImage(context)
@@ -200,8 +201,10 @@ function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
             var width = this.canvas.width;
             var height = this.canvas.height;
             context.clearRect(0, 0, width, height);
-            context.fillStyle = settings.backgroundColor;
-            context.fillRect(0, 0, width, height);
+            if (settings.fillOnClear) {
+              context.fillStyle = settings.backgroundColor;
+              context.fillRect(0, 0, width, height);
+            }
             this.blank = true;
             return this;
         },
