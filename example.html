@@ -43,6 +43,10 @@
 				<a href="#" onclick='$("#test").data("jqScribble").update({brush: BasicBrush});'>Basic</a>
 				<a href="#" onclick='$("#test").data("jqScribble").update({brush: LineBrush});'>Line</a>
 				<a href="#" onclick='$("#test").data("jqScribble").update({brush: CrossBrush});'>Cross</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: DotBrush});'>Dot</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: CircleBrush});'>Circle</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: SemiCircleBrush});'>SemiCircle</a>
+				<a href="#" onclick='$("#test").data("jqScribble").update({brush: RectangleBrush});'>Rectangle</a>
 			</div>
 			<div class="column-right links">
 				<strong>COLORS:</strong>
@@ -56,6 +60,8 @@
 		<div class="links" style="margin-top: 5px;">
 			<strong>OPTIONS:</strong>
 			<a href="#" onclick='addImage();'>Add Image</a>
+			<a href="#" onclick='$("#file").trigger("click");'>Add Local Image</a>
+			<input type="file" id="file" style="display:none;">
 			<a href="#" onclick='$("#test").data("jqScribble").clear();'>Clear</a>
 			<a href="#" onclick='$("#test").data("jqScribble").save();'>Save</a>
 			<a href="#" onclick='save();'>Custom Save</a>
