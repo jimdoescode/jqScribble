@@ -252,30 +252,31 @@ function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
             if(!$.data(this, 'jqScribble'))$.data(this, 'jqScribble', new jqScribble(this, options));
         });
     };
-})(jQuery);
 
 
-$(document).ready(function()
-{
-    $('#file').change(function(e){        
+    $(document).ready(function()
+    {
+      $('#file').change(function(e){
         var file = e.target.files[0],
-        imageType = /image.*/;
-        
+          imageType = /image.*/;
+
         if (!file.type.match(imageType))
-            return;
-        
+          return;
+
         var reader = new FileReader();
         reader.onload = fileOnload;
-        reader.readAsDataURL(file);        
-    });
+        reader.readAsDataURL(file);
+      });
 
-    function fileOnload(e) {
+      function fileOnload(e) {
         var $img = $('<img>', { src: e.target.result });
         var canvas = $('#test')[0];
         var context = canvas.getContext('2d');
 
         $img.load(function() {
-            context.drawImage(this, 0, 0);
+          context.drawImage(this, 0, 0);
         });
-    }
-});
+      }
+    });
+
+})(jQuery);
