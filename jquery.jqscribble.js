@@ -109,6 +109,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
 	{
 		var img = new Image();
 		img.src = settings.backgroundImage;
+		img.crossOrigin = "Anonymous";
 		img.onload = function(){context.drawImage(img, settings.backgroundImageX, settings.backgroundImageY);}
 	}
 
