@@ -11,44 +11,48 @@ $('#test').jqScribble(options);
 ```
 Available Options
 -----------------
-width: The width of the Canvas element if not specified then the width of the parent is used
-DEFAULT - 300
+ * `width` (int) The width of the Canvas element if not specified then the width of the parent is used
+   - DEFAULT - 300
+ * `height` (int) The height of the Canvas element if not specified then the height of the parent is used.
+   - DEFAULT - 250
+ * `backgroundImage` (string) An image to add to the background of the canvas. 
+   - DEFAULT - false
+ * `backgroundImageX` (int) The X offset in the canvas to put the specified background image
+   - DEFAULT - 0
+ * `backgroundImageY` (int) The Y offset in the canvas to put the specified background image
+   - DEFAULT - 0
+ * `backgroundColor` (string) The hex color value to set the background as.
+   - DEFAULT - #ffffff
+ * `saveMimeType` (string) If the image is saved the mime type that will be used. 
+   - DEFAULT - image/png
+ * `saveFunction` (function) The function to use when saving the drawing. 
+   - DEFAULT - BasicCanvasSave
+ * `brush` (jqScribbleBrush) The brush to used when drawing on the Canvas. 
+   - DEFAULT - BasicBrush
+ * `brushSize` (int) The size of the brush that is used. 
+   - DEFAULT - 2
+ * `brushColor` (string) The color of the brush stroke.
+   - DEFAULT - #000
+ * `fillOnClear` (bool) Controls whether or not the canvas will be filled with color upon execution of clear().
+   - DEFAULT - true
 
-height: The height of the Canvas element if not specified then the height of the parent is used.
-DEFAULT - 250
+Exposed Attributes
+------------------
+You can access the canvas DOM element of a jqScribble instance by calling
+```js
+$('...').data('jqScribble').canvas
+```
+You can check if the jqScribble instance has been drawn on by checking 
+```js
+$('...').data('jqScribble').blank
+```
+To get the brush object that jqScribble is currently using
+```js
+$('...').data('jqScribble').brush
+```
 
-backgroundImage: An image to add to the background of the canvas. 
-DEFAULT - false
-
-backgroundImageX: The X offset in the canvas to put the specified background image
-DEFAULT - 0
-
-backgroundImageY: The Y offset in the canvas to put the specified background image
-DEFAULT - 0
-
-backgroundColor: The hex color value to set the background as.
-DEFAULT - #ffffff
-
-saveMimeType: If the image is saved the mime type that will be used.
-DEFAULT - image/png
-
-saveFunction: The function to use when saving the drawing.
-DEFAULT - BasicCanvasSave
-
-brush: The brush to used when drawing on the Canvas.
-DEFAULT - BasicBrush
-
-brushSize: The size of the brush that is used.
-DEFAULT - 2
-
-brushColor: The color of the brush stroke.
-DEFAULT - rgb
-
-fillOnClear: Controls whether or not the canvas will be filled with color upon execution of clear().
-DEFAULT - true
-
-Creating Brushes
-----------------
+Creating New Brushes
+--------------------
 New brushes should inherit from the jqScribbleBrush object as follows:
 ```js
 NewBrush.prototype = new jqScribbleBrush.
@@ -69,7 +73,7 @@ A save function will be passed the image data of the canvas, provided the canvas
 ```js
 function mySave(imageData)
 ```
-The specified save function will not be called until the canvas is not empty and you call the jqScribble save function. 
+The specified _save function will not be called until the canvas is not empty_ and you call the jqScribble save function. 
 ```js
 $('...').data('jqScribble').save()
 ```
@@ -81,7 +85,7 @@ The save method is chainable with other jqScribble methods.
 
 Updating jqScribble Options
 ---------------------------
-Updates can be passed to the jqscribble by calling
+Updates can be passed to the jqScribble instance by calling
 ```js
 $('...').data('jqScribble').update(options)
 ```
@@ -95,18 +99,3 @@ To reset the canvas call
 $('...').data('jqScribble').clear()
 ```
 The clear method is chainable with other jqScribble methods.
-
-jqScribble Attributes
----------------------
-You can also access the canvas element jqScribble is using by calling
-```js
-$('...').data('jqScribble').canvas
-```
-You can check if the canvas has been drawn on by checking 
-```js
-$('...').data('jqScribble').blank
-```
-To get the brush object that jqScribble is currently using
-```js
-$('...').data('jqScribble').brush
-```
