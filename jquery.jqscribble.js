@@ -104,7 +104,7 @@ function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
         brush:                  BasicBrush,
         brushSize:              2,
         brushColor:             "rgb(0,0,0)",
-    fillOnClear: true
+        fillOnClear:            true
     };
 
     function addImage(context)
