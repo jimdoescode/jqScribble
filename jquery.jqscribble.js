@@ -21,97 +21,116 @@ THE SOFTWARE.
 */
 function jqScribbleBrush()
 {
-	jqScribbleBrush.prototype._init = function(context, brushSize, brushColor)
-	{
-		this.context = context;
-		this.context.globalCompositeOperation = 'source-over';
-		this.brushSize = brushSize;
-		this.brushColor = brushColor;
-		this.drawn = false;
-		this.active = false;
-	};
-	
-	//For custom brushes override this method and perform 
-	//any action to prepare the brush for drawing.
-	jqScribbleBrush.prototype.strokeBegin = function(x, y)
-	{
-		this.active = true;
-		this.context.beginPath();
-		this.context.lineWidth = this.brushSize;
-	};
-	
-	//For custom brushes override this method and perform
-	//any action that the brush does while drawing.
-	jqScribbleBrush.prototype.strokeMove = function(x, y){this.drawn = this.active;};
-	
-	//For custom brushes override this method to perform
-	//any action to reset the brush once drawing is complete
-	jqScribbleBrush.prototype.strokeEnd = function()
-	{
-		this.active = false;
-		if(this.drawn)
-		{
-			this.drawn = false;
-			return true;
-		}
-		return false;
-	};
+    jqScribbleBrush.prototype._init = function(context, brushSize, brushColor)
+    {
+        this.context = context;
+        this.context.globalCompositeOperation = 'source-over';
+        this.brushSize = brushSize;
+        this.brushColor = brushColor;
+        this.drawn = false;
+        this.active = false;
+    };
+
+    //For custom brushes override this method and perform
+    //any action to prepare the brush for drawing.
+    jqScribbleBrush.prototype.strokeBegin = function(x, y)
+    {
+        this.active = true;
+        this.context.beginPath();
+        this.context.lineWidth = this.brushSize;
+    };
+
+    //For custom brushes override this method and perform
+    //any action that the brush does while drawing.
+    jqScribbleBrush.prototype.strokeMove = function(x, y){this.drawn = this.active;};
+
+    //For custom brushes override this method to perform
+    //any action to reset the brush once drawing is complete
+    jqScribbleBrush.prototype.strokeEnd = function()
+    {
+        this.active = false;
+        if(this.drawn)
+        {
+            this.drawn = false;
+            return true;
+        }
+        return false;
+    };
 }
 //All brushes should inherit from the Brush interface
 BasicBrush.prototype = new jqScribbleBrush;
 function BasicBrush()
 {
-	BasicBrush.prototype.strokeBegin = function(x, y)
-	{
-		//For custom brushes make sure to call the parent brush methods
-		jqScribbleBrush.prototype.strokeBegin.call(this, x, y);
-		this.prevX = x; 
-		this.prevY = y;
-	};
-	
-	BasicBrush.prototype.strokeMove = function(x, y)
-	{
-		//For custom brushes make sure to call the parent brush methods
-		jqScribbleBrush.prototype.strokeMove.call(this, x, y);
-					
-		this.context.moveTo(this.prevX, this.prevY);
-		this.context.lineTo(x, y);
-		
-		this.context.strokeStyle = this.brushColor;
-		this.context.stroke();
-		
-		this.prevX = x;
-		this.prevY = y;
-	};
+    BasicBrush.prototype.strokeBegin = function(x, y)
+    {
+        //For custom brushes make sure to call the parent brush methods
+        jqScribbleBrush.prototype.strokeBegin.call(this, x, y);
+        this.prevX = x;
+        this.prevY = y;
+    };
+
+    BasicBrush.prototype.strokeMove = function(x, y)
+    {
+        //For custom brushes make sure to call the parent brush methods
+        jqScribbleBrush.prototype.strokeMove.call(this, x, y);
+
+        this.context.moveTo(this.prevX, this.prevY);
+        this.context.lineTo(x, y);
+
+        this.context.strokeStyle = this.brushColor;
+        this.context.stroke();
+
+        this.prevX = x;
+        this.prevY = y;
+    };
 }
 
 function BasicCanvasSave(imageData){window.open(imageData,'jqScribble Image');}
 
 (function($)
-{	
-	//These are the default settings if none are specified.
-	var settings = {
-		width:				300,
-		height: 			250,
-		backgroundImage:	false,
-		backgroundImageX: 	0,
-		backgroundImageY: 	0,
-		backgroundColor:	"#ffffff",
-		saveMimeType: 		"image/png",
-		saveFunction: 		BasicCanvasSave,
-		brush:				BasicBrush,
-		brushSize:			2,
-		brushColor:			"rgb(0,0,0)",
-    fillOnClear: true
-	};
-	
-	function addImage(context)
-	{
-		var img = new Image();
-		img.src = settings.backgroundImage;
-		img.crossOrigin = "Anonymous";
-		img.onload = function(){context.drawImage(img, settings.backgroundImageX, settings.backgroundImageY);}
-	}
+{
+    //These are the default settings if none are specified.
+    var settings = {
+        width:                  300,
+        height:                 250,
+        backgroundImage:        false,
+        backgroundImageX:       0,
+        backgroundImageY:       0,
+        backgroundImageWidth:   null,
+        backgroundImageHeight:  null,
+        backgroundColor:        "#ffffff",
+        saveMimeType:           "image/png",
+        saveFunction:           BasicCanvasSave,
+        brush:                  BasicBrush,
+        brushSize:              2,
+        brushColor:             "rgb(0,0,0)",
+        fillOnClear:            true
+    };
+
+    function addImage(context)
+    {
+        var img = new Image();
+        img.src = settings.backgroundImage;
+        img.crossOrigin = "Anonymous";
+
+        img.onload = function(){
+            if (settings.backgroundImageHeight && settings.backgroundImageWidth){
+                context.drawImage(
+                    img,
+                    settings.backgroundImageX,
+                    settings.backgroundImageY,
+                    settings.backgroundImageWidth,
+                    settings.backgroundImageHeight
+                );
+            } else {
+                context.drawImage(
+                    img,
+                    settings.backgroundImageX,
+                    settings.backgroundImageY
+                );
+            }
+        }
+    }
 
     var jqScribble = function(elm, options)
     {
